@@ -412,11 +412,13 @@ do
     TMPFILE=$(mktemp /var/tmp/bht.XXXXXX)
     smartctl -a $D > $TMPFILE
     HDD_DATA[$D].type=$(print_HDD_type $TMPFILE)
+    HDD_MODEL=$(cat /sys/block/$(basename $D)/device/model | tr -d ' ')
+    HDD_SN="$(lsblk --nodeps -no serial $D)"
     if [[ ${HDD_DATA[$D].type} == SAS ]] ; then
-	smartctl --xall $D > $TMPFILE
+        smartctl --xall $D > $TMPFILE
+        [[ $(lsblk --nodeps -no serial | grep -c "$HDD_SN") -gt 1 ]] && \
+            HDD_SN="${HDD_SN}_$(basename $(readlink /sys/block/$(basename $D)/device) | tr ':' '.')"
     fi
-    HDD_MODEL=$(awk -F: '$1~"^(Device Model|Product)" {gsub(" ","",$2); print $2}' $TMPFILE)
-    HDD_SN=$(awk -F: '$1~"^Serial [Nn]umber" {gsub(" ","",$2); print $2}' $TMPFILE)
     # check that we have HDD_MODEL and HDD_SN before proceeding
     if [[ -z $HDD_MODEL ]] || [[ -z $HDD_SN ]] ; then
 	print "ERR: could not identify model and/or serial number for $D. Abort."
