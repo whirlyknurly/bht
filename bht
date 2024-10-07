@@ -424,10 +424,10 @@ do
 	print "ERR: could not identify model and/or serial number for $D. Abort."
 	exit 1
     fi
-    [[ ! -d ${BHTDIR}/disks/${HDD_MODEL}_${HDD_SN} ]] && mkdir ${BHTDIR}/disks/${HDD_MODEL}_${HDD_SN}
-    mv -f $TMPFILE ${BHTDIR}/disks/${HDD_MODEL}_${HDD_SN}/pre-test.smart
-    print "INFO: $HDD_MODEL / $HDD_SN"
     HDD_DATA[$D].dir=${BHTDIR}/disks/${HDD_MODEL}_${HDD_SN}
+    [[ ! -d ${HDD_DATA[$D].dir} ]] && mkdir ${HDD_DATA[$D].dir}
+    mv -f $TMPFILE ${HDD_DATA[$D].dir}/pre-test.smart
+    print "INFO: $HDD_MODEL / $HDD_SN"
     HDD_DATA[$D].model=${HDD_MODEL}
     HDD_DATA[$D].serial=${HDD_SN}
     print "${HDD_DATA[$D].type}" > ${HDD_DATA[$D].dir}/hdd_type
