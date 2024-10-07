@@ -255,7 +255,7 @@ typeset -a HDD_LIST=( $@ )
 #print "HDD_LIST size = ${#HDD_LIST[*]}, list = ${HDD_LIST[*]}"
 
 # check that all required external utilities are available
-for p in smartctl badblocks sha256sum mkdir id lsscsi mktemp grep awk mv find mailx ps pvs
+for p in smartctl badblocks sha256sum mkdir id lsscsi mktemp grep awk mv find ps pvs $([[ -n $EMAIL ]] && echo mailx)
 do
     if ! $(which $p 2>/dev/null 1>&2) ; then
 	print "ERR: $p is not available or not in your PATH. please install $p and try again."
