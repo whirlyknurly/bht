@@ -196,7 +196,7 @@ function run_badblocks {
     typeset _hdd_type=$(<${_dir}/hdd_type)
 
     print "$_hdd" > $_dir/log
-    badblocks -b $BLOCKS_SIZE -c $STRIDE_SIZE -wsv $_hdd >${_dir}/badblocks.out 2>&1 &
+    badblocks -b $BLOCKS_SIZE -c $STRIDE_SIZE -wsv $_hdd 2>&1 | awk 'RS="\010+" {print; system("")}' > ${_dir}/badblocks.out &
     print $! > ${_dir}/badblocks.pid
     # wait for badblocks to finish
     wait
