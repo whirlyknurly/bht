@@ -348,6 +348,7 @@ cd $BHTDIR
 
 for i in ${!HDD_LIST[*]}
 do
+    HDD_LIST[i]=$(realpath "${HDD_LIST[i]}")
     # make sure it is a block device
     if [[ ! -b ${HDD_LIST[i]} ]] ; then
 	print "WARN: ${HDD_LIST[i]} is not a block device. removing from list."
